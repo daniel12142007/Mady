@@ -57,18 +57,4 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
-    @Bean
-    public CorsFilter corsFilter() {
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-
-        CorsConfiguration config = new CorsConfiguration();
-        config.setAllowCredentials(false); // Если true, "Access-Control-Allow-Origin: *" не будет работать
-        config.addAllowedOrigin("*"); // Разрешить всем источникам
-        config.setAllowedHeaders(List.of("*")); // Разрешить все заголовки
-        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS")); // Разрешить все методы
-
-        source.registerCorsConfiguration("/**", config); // Применить ко всем маршрутам
-        return new CorsFilter();
-    }
 }
