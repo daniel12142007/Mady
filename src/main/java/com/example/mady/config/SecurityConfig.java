@@ -2,7 +2,6 @@ package com.example.mady.config;
 
 import com.example.mady.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.apache.catalina.filters.CorsFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -16,7 +15,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
 import java.util.List;
 
@@ -39,7 +39,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .cors().and().csrf().disable()
+                .cors().and().csrf().disable() // Включение CORS
                 .authorizeRequests(
                         auth -> auth
                                 .antMatchers("/swagger", "/swagger-ui/index.html")
@@ -56,5 +56,17 @@ public class SecurityConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public CorsFilter corsFilter() {
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowCredentials(true); // Разрешить использование учетных данных (Cookies, Headers)
+        config.addAllowedOriginPattern("*"); // Разрешить запросы со всех источников
+        config.addAllowedHeader("*"); // Разрешить любые заголовки
+        config.addAllowedMethod("*"); // Разрешить любые методы (GET, POST, PUT, DELETE и т.д.)
+        source.registerCorsConfiguration("/**", config); // Применить CORS ко всем маршрутам
+        return new CorsFilter(source);
     }
 }
