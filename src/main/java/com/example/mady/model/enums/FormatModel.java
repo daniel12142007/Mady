@@ -29,6 +29,7 @@ public enum FormatModel {
     RELIGIOUS_EVENTS,
     LIVESTOCK_COMMITTEE,
     SEED_FARMING,
+    GRAIN_FARMING,
     TIPS,
     HOUSE_OF_CULTURE,
     MUSEUMS,
